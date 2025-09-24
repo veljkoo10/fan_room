@@ -1,0 +1,391 @@
+.schedule-wrapper {
+  margin-top: 80px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 20px;
+}
+
+.filters .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filters label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.table-title {
+  margin-left: auto;
+}
+
+.table-title.with-block {
+  margin-right: 350px;
+}
+
+.table-title.without-block {
+  margin-right: 400px;
+}
+
+.title-and-actions {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons .btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-buttons .btn-create {
+  background-color: #28a745;
+}
+
+.action-buttons .btn-create:hover {
+  background-color: #218838;
+}
+
+.action-buttons .btn-block-action {
+  background-color: #343a40;
+}
+
+.action-buttons .btn-block-action:hover {
+  background-color: #23272b;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  cursor: default;
+}
+
+.table th, .table td {
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.table tbody td:first-child {
+  font-weight: bold;
+  background-color: #fff;
+  color: #000;
+}
+
+.table tbody td:not(:first-child) {
+  background-color: #44963b;
+  color: white;
+  cursor: pointer;
+}
+
+.table td.reserved {
+  background-color: #f54242 !important;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.open-for-join {
+  background-color: #007bff !important;
+  color: white;
+}
+
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.custom-modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 95%;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  margin-top: -250px;
+}
+
+.close {
+  float: right;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+textarea.form-control {
+  resize: none;
+  min-height: 80px;
+}
+
+.modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-footer button {
+  min-width: 120px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.btn-reserve {
+  background-color: #28a745;
+}
+
+.btn-reserve:hover {
+  background-color: #218838;
+}
+
+.btn-cancel {
+  background-color: #ff4d4d;
+}
+
+.btn-cancel:hover {
+  background-color: #ff1a1a;
+}
+
+.btn-block {
+  background-color: #000000;
+}
+
+.btn-block:hover {
+  background-color: #333333;
+}
+
+.reserved {
+  background-color: orange;
+  cursor: not-allowed;
+}
+
+.blocked {
+  background-color: black !important;
+  color: white;
+  cursor: not-allowed !important;
+}
+.participants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.participant-chip {
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-remove {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-remove:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.btn-remove:active {
+  background-color: #a93226;
+  transform: scale(0.95);
+}
+
+.reserved {
+  background-color: red;
+  color: white;
+}
+
+.blocked {
+  background-color: gray;
+  color: white;
+}
+
+.available {
+  background-color: lightblue;
+  color: black;
+}
+.btn-join {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+}
+
+.btn-join:hover {
+  background-color: #218838;
+}
+
+.btn-join:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+.btn-rate {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-rate:hover {
+  background-color: darkorange;
+}
+.btn-submit {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: darkorange;
+}
+
+.btn-cancel {
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: darkgray;
+}
+
+.rating-stars .star {
+  font-size: 20px;
+  color: gold;
+  cursor: pointer;
+}
+
+.rating-stars .star.selected {
+  color: darkorange;
+}
+.rating-stars {
+  font-size: 20px;
+  color: gold;
+  cursor: pointer;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+}
+.ratings-list {
+  margin-top: 15px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.rating-item {
+  margin-bottom: 5px;
+}
+#part-title{
+  margin-top: 10px;
+}
+.no-ratings-placeholder {
+  text-align: center;
+  padding: 20px;
+  margin-top: 15px;
+  background-color: #f8f9fa;
+  border: 1px dashed #dee2e6;
+  border-radius: 8px;
+  color: #6c757d;
+}
+
+.no-ratings-placeholder p {
+  margin: 0;
+  font-style: italic;
+}
+.modal-footer.centered-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}

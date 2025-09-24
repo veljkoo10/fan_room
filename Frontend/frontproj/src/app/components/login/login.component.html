@@ -1,0 +1,93 @@
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img [src]="imagePath" alt="login form" class="img-fluid" />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5">
+                <h1 class="text-center fw-bold mb-4">Sign In</h1>
+
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                  <ng-container *ngFor="let field of formFields">
+                    <div class="form-outline mb-4">
+                      <label class="form-label" [for]="field.name">{{ field.label }}</label>
+                      <input
+                        [type]="field.type"
+                        [id]="field.name"
+                        class="form-control form-control-lg"
+                        [placeholder]="field.placeholder"
+                        [formControlName]="field.name"
+                        [autocomplete]="field.autocomplete || ''"
+                      />
+                      <div *ngIf="loginForm.get(field.name)?.touched && loginForm.get(field.name)?.invalid" class="text-danger mt-1">
+                        <small *ngIf="loginForm.get(field.name)?.errors?.['required']">{{ field.label }} is required.</small>
+                        <small *ngIf="loginForm.get(field.name)?.errors?.['email']">Invalid email format.</small>
+                        <small *ngIf="loginForm.get(field.name)?.errors?.['minlength']">
+                          Minimum {{ loginForm.get(field.name)?.errors?.['minlength'].requiredLength }} characters
+                        </small>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <!-- Forgot Password link -->
+                  <div class="mb-4 text-end">
+                    <a (click)="showForgotPasswordModal = true" class="register-link">Forgot Password?</a>
+                  </div>
+
+
+                  <div class="pt-1 mb-4">
+                    <button class="btn btn-dark btn-lg btn-block" type="submit" [disabled]="submitting">
+                      {{ submitting ? 'Logging in...' : 'Login' }}
+                    </button>
+                  </div>
+
+                  <p class="mb-5 pb-lg-2">
+                    Don't have an account? <a (click)="goToRegister()" class="register-link">Register here</a>
+                  </p>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-popup
+    [message]="popupMessage"
+    [type]="popupType"
+    [title]="popupTitle"
+    (closed)="closePopup()">
+  </app-popup>
+
+
+</section>
+<div class="modal" tabindex="-1" [ngClass]="{'show d-block': showForgotPasswordModal}" *ngIf="showForgotPasswordModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reset Password</h5>
+        <button type="button" class="btn-close" (click)="closeForgotPasswordModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="forgotPasswordForm" (ngSubmit)="sendResetLink()">
+          <div class="mb-3">
+            <label for="resetEmail" class="form-label">Email address</label>
+            <input type="email" id="resetEmail" class="form-control" formControlName="email" placeholder="Enter your email" />
+            <div *ngIf="forgotPasswordForm.get('email')?.touched && forgotPasswordForm.get('email')?.invalid" class="text-danger mt-1">
+              <small *ngIf="forgotPasswordForm.get('email')?.errors?.['required']">Email is required.</small>
+              <small *ngIf="forgotPasswordForm.get('email')?.errors?.['email']">Invalid email format.</small>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="forgotPasswordForm.invalid">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

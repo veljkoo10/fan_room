@@ -1,0 +1,21 @@
+<div class="custom-popup" *ngIf="message" (click)="close()">
+  <div class="custom-popup-content" (click)="$event.stopPropagation()">
+    <h4 [ngClass]="{
+      'text-success': type === 'success',
+      'text-danger': type === 'error' || type === 'confirm'
+    }">
+      {{ title || (type === 'success' ? 'Success!' : type === 'error' || type === 'confirm' ? 'Confirm' : 'Error!') }}
+    </h4>
+
+    <p>{{ message }}</p>
+
+    <div *ngIf="type !== 'confirm'">
+      <button class="btn" [ngClass]="{'btn-success': type === 'success', 'btn-danger': type === 'error'}" (click)="close()">OK</button>
+    </div>
+
+    <div *ngIf="type === 'confirm'">
+      <button class="btn btn-danger me-2" (click)="confirm()">Yes</button>
+      <button class="btn btn-secondary" (click)="close()">No</button>
+    </div>
+  </div>
+</div>

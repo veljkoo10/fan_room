@@ -1,0 +1,209 @@
+.navbar {
+  background-color: #ffffff;
+  padding: 0.5rem 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#logo {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand h4 {
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover img,
+.navbar-brand:hover h4 {
+  transform: scale(1.1);
+}
+
+.main-link {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin-left: 2rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.main-link:hover {
+  transform: scale(1.15);
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-menu {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  text-align: center;
+  z-index: 1000;
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.profile-menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.2rem;
+  transition: background-color 0.2s ease, transform 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.profile-menu-item:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.05)
+}
+
+#sport-link {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar .container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+}
+
+.profile-container:hover .profile-icon {
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  border: 2px solid white;
+  transform: translate(35%, -35%);
+  pointer-events: none;
+}
+.notification-item {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-badge-text {
+  position: absolute;
+  top: 20%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  border: 2px solid white;
+  pointer-events: none;
+}
+.profile-container {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.profile-container:hover {
+  transform: scale(1.05);
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: block;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  transform: translate(35%, -35%);
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.profile-container:hover .notification-badge {
+  transform: translate(35%, -35%) scale(1.15);
+}
+
+.notification-item {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.notification-item:hover {
+  transform: scale(1.1);
+}
+
+.notification-badge-text {
+  position: absolute;
+  top: 20%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.notification-item:hover .notification-badge-text {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+

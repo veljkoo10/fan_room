@@ -1,0 +1,62 @@
+<section class="vh-100 signup-section">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card signup-card">
+          <div class="card-body p-0">
+            <div class="row g-0">
+
+              <div class="col-md-6 d-flex flex-column justify-content-start">
+                <div class="p-4 p-md-5 form-container-padding">
+                  <p class="text-center h1 fw-bold mb-4">Sign up</p>
+
+                  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+                    <ng-container *ngFor="let field of formFields">
+                      <div class="mb-4 position-relative">
+                        <label [for]="field.name" class="form-label">{{ field.label }}</label>
+                        <input
+                          [id]="field.name"
+                          [type]="field.type"
+                          class="form-control"
+                          [formControlName]="field.name"
+                          [placeholder]="field.placeholder"
+                          [autocomplete]="field.autocomplete || ''"
+                        >
+                        <div *ngIf="registerForm.get(field.name)?.touched && registerForm.get(field.name)?.invalid"
+                             class="position-absolute text-danger" style="font-size: 0.8rem; bottom: -18px;">
+                          <small *ngFor="let error of fieldErrors(field.name)">{{ error }}</small>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <button type="submit" class="btn btn-dark w-100" [disabled]="submitting || registerForm.invalid">
+                      {{ submitting ? 'Registering...' : 'Register' }}
+                    </button>
+
+                    <p class="text-center mt-3">
+                      Already have an account?
+                      <a class="login-link" (click)="goToLogin()">Login here</a>
+                    </p>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-none d-md-block">
+                <img [src]="imagePath" alt="Signup image" class="signup-image">
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-popup
+  [message]="popupMessage"
+  [type]="isServerMessage ? 'error' : 'success'"
+  [title]="isServerMessage ? 'Registration Failed' : 'Registration Successful'"
+  (closed)="closePopup()">
+</app-popup>

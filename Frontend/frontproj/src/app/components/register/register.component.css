@@ -1,0 +1,77 @@
+.signup-section {
+  background-color: #eee;
+  height: 100vh;
+}
+
+.signup-card {
+  border-radius: 25px;
+  overflow: hidden;
+  min-height: 674px;
+  max-height: 674px;
+  max-width: 1074px;
+  margin: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-col {
+  padding: 2rem;
+  flex: 0 0 55%;
+  max-width: 55%;
+}
+
+.image-col {
+  padding: 0;
+  flex: 0 0 45%;
+  max-width: 45%;
+}
+
+.signup-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-link {
+  text-decoration: none;
+  cursor: pointer;
+  color: #007bff;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.text-center {
+  margin-top: 10px;
+}
+.form-container-padding {
+  padding-top: 20px !important;
+}
+.custom-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.custom-popup-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.custom-popup-content p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+}

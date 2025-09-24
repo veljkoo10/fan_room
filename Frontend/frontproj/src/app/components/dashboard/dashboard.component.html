@@ -1,0 +1,361 @@
+<div class="schedule-wrapper container">
+  <div class="top-row">
+    <div class="filters" [formGroup]="scheduleForm">
+      <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" formControlName="date" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="sport">Sport:</label>
+        <select id="sport" formControlName="sport" class="form-control full-width">
+          <option value="">--Select Sport--</option>
+          <option *ngFor="let sport of sports" [value]="sport.name">{{ sport.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-title" [ngClass]="{ 'with-block': isAdmin, 'without-block': !isAdmin }">
+      <h3>Reservations:</h3>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-create" (click)="openCreateModal(false)">Create</button>
+      <button *ngIf="isAdmin" class="btn btn-block-action" (click)="openCreateModal(true)">Block</button>
+    </div>
+
+
+  </div>
+  <div class="form-group">
+    <label>
+      <input type="checkbox" [(ngModel)]="showMyReservations" (change)="filterReservations()" />
+      Show only my reservations
+    </label>
+  </div>
+
+
+  <div class="table-container">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th *ngFor="let slot of timeSlots">{{ slot }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let sport of selectedSport">
+        <td>{{ sport.name }}</td>
+        <td *ngFor="let slot of timeSlots"
+            [ngClass]="{
+      'blocked': isBlocked(sport.name, slot),
+      'open-for-join': isOpen(sport.name, slot),
+      'reserved': isReserved(sport.name, slot) && !isOpen(sport.name, slot)
+    }"
+            (click)="openModal(sport, slot)">
+          {{ getSlotLabel(sport.name, slot) }}
+        </td>
+
+
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="custom-modal" *ngIf="isModalOpen">
+  <div class="custom-modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2 class="modal-title">
+      {{ modalData.reserved || modalData.pastSlot ? 'Reservation Details' : 'New Reservation' }}
+    </h2>
+
+    <form>
+      <div class="form-group">
+        <label>Sport:</label>
+        <input type="text" class="form-control" [value]="modalData.sportName" disabled />
+      </div>
+
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="text" class="form-control" [value]="formattedDate" disabled />
+      </div>
+
+      <div class="form-group">
+        <label>Term:</label>
+        <input type="text" class="form-control" [value]="modalData.slot" disabled />
+      </div>
+
+      <div *ngIf="modalData.reserved">
+        <div class="form-group">
+          <label>Reservation by:</label>
+          <input type="text" class="form-control" [value]="modalData.username" disabled />
+        </div>
+
+        <div class="form-group">
+          <label id="part-title">Participants:</label>
+          <div class="participants-list" *ngIf="modalData.participants && modalData.participants.length > 0; else noParticipants">
+      <span *ngFor="let participant of modalData.participants" class="participant-chip">
+        {{ participant }}
+      </span>
+          </div>
+          <ng-template #noParticipants>
+            <small class="text-muted">No other participants have joined.</small>
+          </ng-template>
+        </div>
+      </div>
+
+      <div *ngIf="!modalData.reserved && !modalData.pastSlot">
+        <div class="form-group">
+          <label for="participantsSelectModal">Add Participants:</label>
+          <select id="participantsSelectModal"
+                  name="participantsSelectModal"
+                  [(ngModel)]="modalData.participants"
+                  (ngModelChange)="onParticipantsChange($event)"
+                  multiple class="form-control">
+            <ng-container *ngFor="let user of allUsers">
+              <option *ngIf="user !== currentUsername" [ngValue]="user">{{ user }}</option>
+            </ng-container>
+          </select>
+          <small>Use Ctrl to select multiple users</small>
+        </div>
+
+        <div class="form-group">
+          <small>Remaining slots: {{ modalData.remainingSlots }}</small>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="!modalData.pastSlot && !modalData.reserved">
+        <label [title]="modalData.remainingSlots === 0 ? 'No remaining slots' : ''">
+          <input type="checkbox"
+                 name="openForJoinModal"
+                 [(ngModel)]="modalData.openForJoin"
+                 [disabled]="modalData.remainingSlots === 0" />
+          Allow others to join this reservation
+        </label>
+        <small *ngIf="modalData.remainingSlots === 0" class="text-muted">
+          Cannot allow others – no remaining slots.
+        </small>
+      </div>
+
+
+
+      <div class="modal-footer">
+        <button *ngIf="modalData.reserved && canCancel() && !isPastSlot(selectedDate, modalData.slot.replace('-', ' '))"
+                type="button" class="btn-cancel"
+                (click)="cancelReservation()">Delete</button>
+
+        <button *ngIf="isAdmin && !isPastSlot(selectedDate, modalData.slot.replace('-', ' '))"
+                type="button" class="btn-block"
+                (click)="blockReservation()">Block</button>
+
+        <button *ngIf="!modalData.reserved && !isPastSlot(selectedDate, modalData.slot.replace('-', ' '))"
+                type="button" class="btn-reserve"
+                (click)="createReservation()">Reserve</button>
+
+        <button *ngIf="modalData.reserved
+                && modalData.participants?.includes(currentUsername)
+                && modalData.username !== currentUsername
+                && !isPastSlot(selectedDate, modalData.slot.replace('-', ' '))"
+                type="button"
+                class="btn-remove"
+                (click)="removeFromReservation()">
+          Leave Reservation
+        </button>
+
+        <button *ngIf="isOpen(modalData.sportName, modalData.slot.replace('-', ' ')) &&
+                       !modalData.participants?.includes(currentUsername) &&
+                       modalData.username !== currentUsername &&
+                       !isPastSlot(selectedDate, modalData.slot.replace('-', ' '))"
+                type="button"
+                class="btn-join"
+                (click)="joinReservation()">
+          Join
+        </button>
+
+        <div *ngIf="modalData.pastSlot" class="rating-stars" (click)="toggleRatings()">
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+        </div>
+
+        <button *ngIf="modalData.pastSlot && !userHasRated && (modalData.username === currentUsername || modalData.participants?.includes(currentUsername))"
+                type="button"
+                class="btn-rate"
+                (click)="rateReservation()">
+          Rate
+        </button>
+
+
+      </div>
+      <div *ngIf="showRatings" class="ratings-list">
+        <h4>Comments & Ratings:</h4>
+
+        <div *ngIf="reservationRatings.length > 0; else noRatings">
+          <div *ngFor="let rating of reservationRatings"
+               class="rating-item"
+               style="border:1px solid #ddd; padding:10px; margin-bottom:8px; border-radius:5px; display:flex; justify-content:space-between; align-items:center;">
+
+            <div>
+              <strong>{{ rating.username }}</strong>
+              <p style="margin:4px 0;"><em>{{ rating.comment }}</em></p>
+              <div>
+                <span>Hygiene: {{ rating.hygieneRating }}/10</span> |
+                <span>Equipment: {{ rating.equipmentRating }}/10</span> |
+                <span>Atmosphere: {{ rating.atmosphereRating }}/10</span>
+              </div>
+            </div>
+
+            <div *ngIf="rating.username === currentUsername"
+                 class="delete-icon"
+                 style="cursor:pointer; color:red; font-size:18px;"
+                 (click)="deleteRating(ratingReservationId)">
+              🗑️
+            </div>
+
+
+          </div>
+        </div>
+
+        <ng-template #noRatings>
+          <div class="no-ratings-placeholder">
+            <p>No comments or ratings submitted yet.</p>
+          </div>
+        </ng-template>
+      </div>
+
+
+    </form>
+  </div>
+</div>
+
+<app-popup
+  [message]="message"
+  [type]="messageType"
+  [title]="messageTitle"
+  (closed)="closePopup()">
+</app-popup>
+
+<div class="custom-modal" *ngIf="isCreateModalOpen">
+  <div class="custom-modal-content">
+    <span class="close" (click)="closeCreateModal()">&times;</span>
+    <h2 class="modal-title">
+      {{ isBlockMode ? 'Block Term' : 'New Reservation' }}
+    </h2>
+
+    <form [formGroup]="createForm">
+      <div class="form-group">
+        <label for="sportSelect">Sport:</label>
+        <select id="sportSelect" formControlName="sport" class="form-control" (change)="onSportChange($event)">
+          <option value="" disabled>--Select Sport--</option>
+          <option *ngFor="let sport of sports" [value]="sport.id">{{ sport.name }}</option>
+        </select>
+      </div>
+
+      <div *ngIf="selectedSportObj">
+        <small>
+          Max participants (excluding creator): {{ maxParticipants }} <br/>
+          Remaining slots for others: {{ remainingParticipants }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="dateSelect">Date:</label>
+        <input type="date" id="dateSelect" formControlName="date" class="form-control"/>
+      </div>
+
+      <div class="form-group">
+        <label for="timeFrom">Time From:</label>
+        <select id="timeFrom" formControlName="timeFrom" class="form-control">
+          <option value="" disabled>--Select Time--</option>
+          <option *ngFor="let slot of timeSlots" [value]="slot.split(' ')[0]">{{ slot.split(' ')[0] }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="timeTo">Time To:</label>
+        <select id="timeTo" formControlName="timeTo" class="form-control">
+          <option value="" disabled>--Select Time--</option>
+          <option *ngFor="let slot of timeSlots" [value]="slot.split(' ')[1]">{{ slot.split(' ')[1] }}</option>
+        </select>
+      </div>
+
+      <div *ngIf="!isBlockMode">
+        <div class="form-group">
+          <label for="participantsSelect">Add Participants:</label>
+          <select id="participantsSelect" formControlName="participants" multiple class="form-control">
+            <ng-container *ngFor="let user of allUsers">
+              <option *ngIf="user !== currentUsername" [value]="user">{{ user }}</option>
+            </ng-container>
+          </select>
+          <small>Use Ctrl to select multiple users</small>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" formControlName="openForJoin" [disabled]="remainingParticipants === 0" />
+            Allow others to join this reservation
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn-reserve"
+          (click)="isBlockMode ? createBlock() : createNewReservation()">
+          {{ isBlockMode ? 'Block' : 'Create' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<div class="custom-modal" *ngIf="isRatingModalOpen">
+  <div class="custom-modal-content">
+    <span class="close" (click)="isRatingModalOpen = false">&times;</span>
+    <h2 class="modal-title">Rate Reservation</h2>
+
+    <form [formGroup]="ratingForm">
+      <div class="form-group">
+        <label>Hygiene (1-10):</label>
+        <input type="number" formControlName="hygiene" min="1" max="10" class="form-control"/>
+      </div>
+
+      <div class="form-group">
+        <label>Equipment (1-10):</label>
+        <input type="number" formControlName="equipment" min="1" max="10" class="form-control"/>
+      </div>
+
+      <div class="form-group">
+        <label>Atmosphere (1-10):</label>
+        <input type="number" formControlName="atmosphere" min="1" max="10" class="form-control"/>
+      </div>
+
+      <div class="form-group">
+        <label>Additional Comment:</label>
+        <textarea formControlName="comment" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-submit" (click)="submitRating()">Submit</button>
+        <button type="button" class="btn-cancel" (click)="isRatingModalOpen = false">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div class="custom-modal" *ngIf="isDeleteModalOpen">
+  <div class="custom-modal-content">
+    <span class="close" (click)="closeDeleteModal()">&times;</span>
+    <h2 class="modal-title">Confirm Deletion</h2>
+    <p>Are you sure you want to delete this comment?</p>
+    <div class="modal-footer centered-buttons">
+      <button type="button" class="btn-cancel" (click)="closeDeleteModal()">Cancel</button>
+      <button type="button" class="btn-submit" (click)="confirmDeleteRating()">Delete</button>
+    </div>
+  </div>
+</div>

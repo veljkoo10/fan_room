@@ -1,0 +1,31 @@
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+th.position-relative {
+  position: relative;
+}
+
+.table-title {
+  margin: 0;
+  padding: 10px;
+}
+
+.kreiraj-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 100px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+button.btn-sm {
+  min-width: 70px;
+  font-weight: 500;
+}

@@ -1,0 +1,21 @@
+<div class="chart-container card">
+  <h2 class="chart-title">📊 Statistics of bookings by sport</h2>
+
+  <div *ngIf="isLoading" class="feedback-message loading">
+    <p>⏳ Loading statistics...</p>
+  </div>
+
+  <div *ngIf="!isLoading && pieChartData.datasets[0].data.length === 0" class="feedback-message empty">
+    <p>⚠️ No booking information available.</p>
+  </div>
+
+  <div *ngIf="!isLoading && pieChartData.datasets[0].data.length > 0" class="chart-wrapper">
+    <canvas baseChart id="chart"
+            [data]="pieChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="pieChartPlugins"
+            [legend]="pieChartLegend">
+    </canvas>
+  </div>
+</div>

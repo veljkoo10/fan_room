@@ -1,0 +1,86 @@
+<div class="table-container">
+  <table class="table table-striped w-75 text-center position-relative">
+    <thead>
+    <tr>
+      <th colspan="5" class="position-relative">
+        <h2 class="table-title">Sport:</h2>
+        <button class="btn btn-success kreiraj-btn" (click)="openCreateModal()">Create</button>
+      </th>
+    </tr>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Max player</th>
+      <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let sport of sports; let i = index">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ sport.name }}</td>
+      <td>{{ sport.description }}</td>
+      <td>{{ sport.playerCount }}</td>
+      <td>
+        <button class="btn btn-warning btn-sm me-2" (click)="openEditModal(sport)">Edit</button>
+        <button class="btn btn-danger btn-sm" (click)="deleteSport(sport.id, i)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" #createSportModal tabindex="-1" aria-labelledby="createSportModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="createSportForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createSportModalLabel">
+            {{ isEditMode ? 'Edit Sport' : 'Create Sport' }}
+          </h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal(); resetForm()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="sportName" class="form-label">Name</label>
+            <input type="text" id="sportName" class="form-control" formControlName="name">
+            <div *ngIf="createSportForm.get('name')?.invalid && createSportForm.get('name')?.touched" class="text-danger">
+              Name is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="sportDescription" class="form-label">Description</label>
+            <input type="text" id="sportDescription" class="form-control" formControlName="description">
+            <div *ngIf="createSportForm.get('description')?.invalid && createSportForm.get('description')?.touched" class="text-danger">
+              Description is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="sportMaxPlayer" class="form-label">Max Player</label>
+            <input type="number" id="sportMaxPlayer" class="form-control" formControlName="playerCount">
+            <div *ngIf="createSportForm.get('playerCount')?.invalid && createSportForm.get('playerCount')?.touched" class="text-danger">
+              Max player is required and must be greater than 0.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal(); resetForm()">Cancel</button>
+          <button type="button" class="btn btn-success"
+                  [disabled]="createSportForm.invalid"
+                  (click)="isEditMode ? editSport() : createSport()">
+            {{ isEditMode ? 'Update' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-popup
+  [message]="message"
+  [type]="popupType"
+  [title]="popupTitle"
+  (closed)="closePopup()"
+  (confirmed)="confirmDelete()">
+</app-popup>
+
